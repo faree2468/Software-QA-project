@@ -53,5 +53,4 @@ For data, I use the seeded customer and admin accounts from the project's README
 | Tests affecting each other's data | Independent data per test, API setup and cleanup |
 | App updates break locators | Pin the app version, keep locators in Page Objects |
 | The demo app contains deliberate bugs | Check the expected behavior first, then decide if it's a test or product issue |
-| Docker problems on my machine | Document the setup steps |
 | Limited time | Cover high-risk flows (login, cart, checkout) first |

@@ -37,5 +37,3 @@ I picked these 15 cases by asking: if a new release broke this, would a user or 
 | Account | TC13 |
 | Admin | TC14 |
 | Contact | TC15 |
-
-**Balance:** 8 high-priority and 7 medium-priority cases. Negative cases are TC03, TC12 and the second half of TC15.
