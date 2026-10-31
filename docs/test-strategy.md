@@ -22,7 +22,7 @@ For this project I'm testing Practice Software Testing, an open-source demo shop
 The suite is mostly UI end-to-end tests, since that's what a user actually experiences. I use the API only to set up and clean up data, which keeps tests fast and independent of each other. Before automating, I explore the app manually to find stable locators.
 
 - **Framework:** Playwright with Typescript
-- **Other:** Git for version control
+- **Other:** Git for version control, Docker
 
 Each test runs on its own, uses its own data, and relies on explicit waits instead of fixed sleeps.
 
