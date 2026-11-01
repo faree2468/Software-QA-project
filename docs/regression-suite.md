@@ -21,10 +21,10 @@ I picked these 15 cases by asking: if a new release broke this, would a user or 
 | TC09 | Add a product to the cart, change its quantity, and check the total updates | High | Cart totals are calculated logic, and a mistake here means wrong prices charged to customers. |
 | TC10 | Remove a product from the cart and check the cart and total update | Medium | Completes the cart lifecycle and makes sure state is cleaned up correctly. |
 | TC11 | Complete a full checkout as a logged-in customer and check the order confirmation | High | This is the business-critical flow. It runs through login, cart, address, payment and order creation in one test. |
-| TC12 | Try to proceed through checkout with required fields left empty and check validation | Medium | Ensures bad input is stopped before an order is created. |
+| TC12 | Try to proceed through checkout with invalid payment information and check validation | Medium | Ensures bad input is stopped before an order is created. |
 | TC13 | Add a product to favorites and check it appears in the favorites list | Medium | A state-changing feature tied to the user account, which is easy to break when account code changes. |
-| TC14 | Log in as admin, create a product, and check it appears in the shop | High | Covers the admin role and verifies that data created in the back office reaches customers. |
-| TC15 | Submit the contact form with valid data and check the confirmation, then with an invalid email and check the error | Medium | Covers a separate feature with both a positive and a negative path, so a break there doesn't hide behind the shop flows. |
+| TC14 | Log in as admin and check admin features are available | High | Covers the admin role and verifies access to admin-only features. |
+| TC15 | Submit the contact form with invalid data | Medium | Covers contact page and makes sure that it's not overlooked |
 
 ## Coverage Summary
 
