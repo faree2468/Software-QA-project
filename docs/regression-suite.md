@@ -17,7 +17,7 @@ I picked these 15 cases by asking: if a new release broke this, would a user or 
 | TC05 | Search for a product by name and check the results match | High | Search is the main way users find products, and it touches both frontend and API. |
 | TC06 | Sort products by price (low to high) and check the order is correct | Medium | Sorting logic breaks easily when the product query changes, and the result is simple to verify. |
 | TC07 | Filter products by category and check only that category is shown | Medium | Filtering shares the product listing code with search, so changes there can break it quietly. |
-| TC08 | Open a product details page and check name, price and description match the list | Medium | Catches data mismatches between the listing and the detail page. |
+| TC08 | Register a new customer with invalid data and check an error is shown | High | Shows error message next to the invalid data |
 | TC09 | Add a product to the cart, change its quantity, and check the total updates | High | Cart totals are calculated logic, and a mistake here means wrong prices charged to customers. |
 | TC10 | Remove a product from the cart and check the cart and total update | Medium | Completes the cart lifecycle and makes sure state is cleaned up correctly. |
 | TC11 | Complete a full checkout as a logged-in customer and check the order confirmation | High | This is the business-critical flow. It runs through login, cart, address, payment and order creation in one test. |
