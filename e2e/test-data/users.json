@@ -1,7 +1,22 @@
 {
-    "regularUser" : {
+    "existingUser" : {
         "name" : "Jane Doe",
         "email": "customer@practicesoftwaretesting.com",
         "password" : "welcome01"
+    },
+    "admin" : {
+        "name" : "John Doe",
+        "email" : "admin@practicesoftwaretesting.com",
+        "password" : "welcome01"
+    },
+    "newUser" : {
+        "first" : "John",
+        "last" : "Whitaker",
+        "password" : "Securepassword123!%4$5",
+        "birth_date" : "2001-10-10",
+        "country" : "BA",
+        "zipcode" : "71000",
+        "house_number" : "7",
+        "phone_number" : "061062063"
     }
 }
