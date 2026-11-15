@@ -54,4 +54,11 @@ test('@smoke update cart quantity', async({page})=>{
     await expect(page.getByTestId('product-title')).toHaveCount(1);
 })
 
+test('@smoke filter by category', async({page})=> {
+    const homePage = new HomePage(page);
+    await homePage.open();
+    await homePage.filter_by_category('Hand Saw');
+    await expect(page.getByTestId('product-name')).toContainText('Saw');
+})
+
 // Page Object Model, fixtures, stable locators, independent tests

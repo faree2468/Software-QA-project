@@ -11,4 +11,8 @@ export class HomePage {
         await this.page.getByTestId('search-query').fill(name);
         await this.page.getByTestId('search-submit').click();
     }
+
+    async filter_by_category(category: string) {
+        await this.page.getByText(category).click();
+    }
 }
