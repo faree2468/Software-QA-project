@@ -1,10 +1,10 @@
-import type { Page } from "@playwright/test";
+import { expect, type Page } from "@playwright/test";
 
 export class HomePage {
     constructor(private page: Page) {}
 
     async open() {
-        await this.page.goto('https://practicesoftwaretesting.com/')
+        await this.page.goto('/')
     }
 
     async search_product(name: string) {
@@ -14,5 +14,8 @@ export class HomePage {
 
     async filter_by_category(category: string) {
         await this.page.getByText(category).click();
+        await this.page.waitForResponse((response)=>
+            response.url().includes('/products') && response.status() === 200
+        );
     }
 }

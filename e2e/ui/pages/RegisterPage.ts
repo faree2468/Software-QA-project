@@ -5,7 +5,7 @@ export class RegisterPage {
     constructor(private page: Page) {}
 
     async open() {
-        await this.page.goto('https://practicesoftwaretesting.com/auth/register');
+        await this.page.goto('/auth/register');
     }
 
     async register(first: string, 

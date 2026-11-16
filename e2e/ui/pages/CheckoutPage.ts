@@ -4,7 +4,7 @@ export class CheckoutPage {
     constructor(private page: Page) {}
 
     async open() {
-        await this.page.goto('https://practicesoftwaretesting.com/checkout');
+        await this.page.goto('/checkout');
     }
 
 }

@@ -4,7 +4,7 @@ export class LoginPage {
     constructor(private page: Page) {}
 
     async open() {
-        await this.page.goto('https://practicesoftwaretesting.com/auth/login');
+        await this.page.goto('/auth/login');
     }
 
     async login(email: string, password: string) {

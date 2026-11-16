@@ -11,8 +11,7 @@ For this project I'm testing Practice Software Testing, an open-source demo shop
 - Product search, sorting, filtering and the product details page
 - Cart: add, change quantity, remove, check totals
 - Checkout and order confirmation
-- Profile, order history and favorites
-- Admin: add, edit and delete a product
+- Profile and favorites section
 - Contact form
 
 **Out of scope:** performance, security, cross-browser and mobile testing, real payments, and email delivery.
@@ -30,7 +29,7 @@ Each test runs on its own, uses its own data, and relies on explicit waits inste
 
 For data, I use the seeded customer and admin accounts from the project's README. Tests that need a new user generate a unique email each run. Products come from the seed data, so prices and totals are known in advance. Test data lives in a separate config file, not in the test code.
 
-**Machine:** [OS, Chrome, Playwright 1.64.1]
+**Machine:** [OS, Chrome, Firefox, Playwright 1.64.1]
 
 ## 5. Entry and Exit Criteria
 

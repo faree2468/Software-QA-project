@@ -6,7 +6,7 @@ import { HomePage } from './ui/pages/HomePage';
 import { ProductPage } from './ui/pages/ProductPage';
 import { CheckoutPage } from './ui/pages/CheckoutPage';
 
-test('@smoke user logs-in', async ({ page }) => {
+test('@smoke user login', async ({ page }) => {
     const loginPage = new LoginPage(page);
     const {name, email, password} = users.existingUser;
     await loginPage.open();
@@ -47,7 +47,7 @@ test('@smoke update cart quantity', async({page})=>{
     const productPage = new ProductPage(page);
     const checkoutPage = new CheckoutPage(page);
 
-    await productPage.open('01M7FDV0B9XV7FDQNQD80EC12D');
+    await productPage.open('01M7HNNZWVJ3PCNQRAWW6A80J3');
     await productPage.add_to_cart();
     
     await checkoutPage.open();
@@ -58,7 +58,7 @@ test('@smoke filter by category', async({page})=> {
     const homePage = new HomePage(page);
     await homePage.open();
     await homePage.filter_by_category('Hand Saw');
-    await expect(page.getByTestId('product-name')).toContainText('Saw');
+    await expect(page.getByTestId('product-name').first()).toContainText('Saw');
 })
 
 // Page Object Model, fixtures, stable locators, independent tests

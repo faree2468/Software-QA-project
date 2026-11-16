@@ -5,7 +5,7 @@ export class ProductPage {
     constructor(private page: Page) {}
 
     async open(product_id: string) {
-        await this.page.goto(`https://practicesoftwaretesting.com/product/${product_id}`);
+        await this.page.goto(`/product/${product_id}`);
         await expect(this.page.getByTestId('product-name')).toBeVisible();
     }
 

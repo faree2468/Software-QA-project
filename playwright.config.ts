@@ -4,7 +4,7 @@ export default defineConfig({
   testDir: './e2e',
   reporter: [['list'], ['html', { open: 'never' }]],
   use: {
-    baseURL: 'https://practicesoftwaretesting.com/',
+    baseURL: 'http://localhost:4200',
     testIdAttribute: 'data-test',
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
