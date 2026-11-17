@@ -7,4 +7,7 @@ export class CheckoutPage {
         await this.page.goto('/checkout');
     }
 
+    async remove_from_cart() {
+        await this.page.locator('.btn.btn-danger').click();
+    }
 }

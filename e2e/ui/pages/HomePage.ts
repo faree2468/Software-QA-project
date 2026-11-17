@@ -18,4 +18,9 @@ export class HomePage {
             response.url().includes('/products') && response.status() === 200
         );
     }
+
+    async logout() {
+        await this.page.getByTestId('nav-menu').click();
+        await this.page.getByTestId('nav-sign-out').click();
+    }
 }

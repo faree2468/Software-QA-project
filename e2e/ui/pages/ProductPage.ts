@@ -13,4 +13,6 @@ export class ProductPage {
         await this.page.getByTestId('add-to-cart').click();
         await expect(this.page.getByTestId('nav-cart')).toBeVisible();
     }
+    
+    
 }
