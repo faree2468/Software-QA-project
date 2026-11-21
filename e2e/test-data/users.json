@@ -2,7 +2,10 @@
     "existingUser" : {
         "name" : "Jane Doe",
         "email": "customer@practicesoftwaretesting.com",
-        "password" : "welcome01"
+        "password" : "welcome01",
+        "country" : "BA",
+        "zipcode" : "71000",
+        "house_number" : "7"
     },
     "admin" : {
         "name" : "John Doe",
