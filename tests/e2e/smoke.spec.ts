@@ -1,10 +1,10 @@
 import { test, expect } from '@playwright/test';
-import { LoginPage } from './ui/pages/LoginPage';
+import { LoginPage } from './ui/pages/LoginPage.js';
 import users from './test-data/users.json' with {type: 'json'};
-import { RegisterPage } from './ui/pages/RegisterPage';
-import { HomePage } from './ui/pages/HomePage';
-import { ProductPage } from './ui/pages/ProductPage';
-import { CheckoutPage } from './ui/pages/CheckoutPage';
+import { RegisterPage } from './ui/pages/RegisterPage.js';
+import { HomePage } from './ui/pages/HomePage.js';
+import { ProductPage } from './ui/pages/ProductPage.js';
+import { CheckoutPage } from './ui/pages/CheckoutPage.js';
 
 test('@smoke user login', async ({ page }) => {
     const loginPage = new LoginPage(page);

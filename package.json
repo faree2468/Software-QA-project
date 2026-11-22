@@ -16,8 +16,12 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "devDependencies": {
-    "@playwright/test": "^1.65.0"
+    "@playwright/test": "^1.65.0",
+    "@types/node": "^26.6.6"
+  },
+  "dependencies": {
+    "typescript": "^7.0.2"
   }
 }

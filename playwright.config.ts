@@ -1,8 +1,9 @@
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
-  testDir: './e2e',
+  testDir: './tests',
   reporter: [['list'], ['html', { open: 'never' }]],
+  fullyParallel: true,
   use: {
     baseURL: 'http://localhost:4200',
     testIdAttribute: 'data-test',
@@ -10,7 +11,11 @@ export default defineConfig({
     screenshot: 'only-on-failure',
   },
   projects: [
-    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
-    { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
+    {
+      name: 'clear db cache',
+      testMatch: /global\.setup\.ts/,
+    },
+    { name: 'chromium', use: { ...devices['Desktop Chrome'] }, dependencies: ['clear db cache'] },
+    { name: 'firefox', use: { ...devices['Desktop Firefox'] }, dependencies: ['clear db cache'] },
   ],
 });

@@ -24,7 +24,7 @@ nohup.out
 .playwright-mcp
 allure*
 blob-report
-playwright-report
+# playwright-report
 test-results
 /demo/
 /packages/*/LICENSE

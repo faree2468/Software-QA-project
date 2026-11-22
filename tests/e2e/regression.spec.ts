@@ -1,17 +1,17 @@
 import {test, expect} from '@playwright/test';
-import { LoginPage } from './ui/pages/LoginPage';
+import { LoginPage } from './ui/pages/LoginPage.js';
 import users from './test-data/users.json' with {type: 'json'};
-import { HomePage } from './ui/pages/HomePage';
-import { ProductPage } from './ui/pages/ProductPage';
-import { CheckoutPage } from './ui/pages/CheckoutPage';
+import { HomePage } from './ui/pages/HomePage.js';
+import { ProductPage } from './ui/pages/ProductPage.js';
+import { CheckoutPage } from './ui/pages/CheckoutPage.js';
 
 
 test('@regression user invalid login', async ({page}) => {
     const loginPage = new LoginPage(page);
     let email = "wrongemail@gmail.com";
     let password = "wrongpassword123";
-    loginPage.open();
-    loginPage.login(email, password);
+    await loginPage.open();
+    await loginPage.login(email, password);
     await expect(page.getByText("Invalid email or password")).toBeVisible()
 })
 
@@ -20,20 +20,20 @@ test('@regression logout', async ({page}) => {
     const homePage = new HomePage(page);
 
     const {name, email, password} = users.existingUser;
-    loginPage.open();
-    loginPage.login(email, password);
+    await loginPage.open();
+    await loginPage.login(email, password);
 
-    await expect(page.getByText(name)).toBeVisible();
+    await expect(page.getByTestId('nav-menu')).toContainText(name);
 
-    homePage.logout();
+    await homePage.logout();
     
     await expect(page.getByText(name)).not.toBeVisible();
 })
 
 test('@regression remove from cart', async ({page}) => {
     const productPage = new ProductPage(page);
-    productPage.open('01M7HNNZWJFSEJNW5PAK7RX56Q');
-    productPage.add_to_cart();
+    await productPage.open('01M7HNNZWJFSEJNW5PAK7RX56Q');
+    await productPage.add_to_cart();
 
     await page.getByTestId('nav-cart').click();
     await page.locator('.btn.btn-danger').click();
@@ -45,8 +45,8 @@ test('@regression remove from cart', async ({page}) => {
 test('@regression add to favorites', async ({page}) => {
     const loginPage = new LoginPage(page);
     const {name, email, password} = users.existingUser;
-    loginPage.open();
-    loginPage.login(email, password);
+    await loginPage.open();
+    await loginPage.login(email, password);
 
     await expect(page.getByText(name)).toBeVisible();
 
@@ -65,8 +65,8 @@ test('@regression full checkout', async ({page}) => {
     const loginPage = new LoginPage(page);
     const checkoutPage = new CheckoutPage(page);
     const {name, email, password, country, zipcode, house_number} = users.existingUser;
-    loginPage.open();
-    loginPage.login(email, password);
+    await loginPage.open();
+    await loginPage.login(email, password);
 
     await expect(page.getByText(name)).toBeVisible();
 
@@ -78,10 +78,10 @@ test('@regression full checkout', async ({page}) => {
 
     await page.getByTestId('nav-cart').click();
 
-    checkoutPage.proceed_to_checkout();
-    checkoutPage.proceed_to_checkout_signed_in();
-    checkoutPage.fill_billing_info(country, zipcode, house_number);
-    checkoutPage.pay();
+    await checkoutPage.proceed_to_checkout();
+    await checkoutPage.proceed_to_checkout_signed_in();
+    await checkoutPage.fill_billing_info(country, zipcode, house_number);
+    await checkoutPage.pay();
     
     await expect(page.getByTestId('payment-success-message')).toBeVisible();
 
