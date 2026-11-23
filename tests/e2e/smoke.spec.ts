@@ -60,5 +60,3 @@ test('@smoke filter by category', async({page})=> {
     await homePage.filter_by_category('Hand Saw');
     await expect(page.getByTestId('product-name').first()).toContainText('Saw');
 })
-
-// Page Object Model, fixtures, stable locators, independent tests
