@@ -90,7 +90,7 @@ test('@api GET /invoices returns unauthorized for guest user', async({ request }
     });
 })
 
-test('@api POST /login with invalid credentials returns unauthorized', async({ request }) => {
+test('@api POST /users/login with invalid credentials returns unauthorized', async({ request }) => {
     const data = {
         email: "wrongemail@gmail.com",
         password: "wrongpassword123"
@@ -104,8 +104,72 @@ test('@api POST /login with invalid credentials returns unauthorized', async({ r
 
 })
 
-// one for valid login as well
+test('@api POST /users/login with valid credentials returns access token (bearer)', async({ request }) => {
+    const data = {
+        "email" : "customer@practicesoftwaretesting.com",
+        "password" : "welcome01"
+    }
+    const response = await request.post(URL + '/users/login', {data: data})
+    expect(response.status()).toBe(200);
+    expect(response.headers()['content-type']).toContain('application/json');
+    expect(await response.json()).toHaveProperty("access_token");
 
-// after all tests finish, for successful POST and DELETE, have equivalent DELETE and POST (we keep the data as it is)
+})
 
-// 8 automated api tests, Cover: status codes, response body, negative cases (invalid input, missing authorization, not found), and a create-read-update-delete flow
+test('@api PATCH /products/01M7HNNZWYXRNJZG1BB567BYT8 updates only product name and returns a success message', async({ request }) => {
+    const data = {
+        "name" : "Actual Thor Hammer"
+    }
+    const response = await request.patch(URL + '/products/01M7HNNZWYXRNJZG1BB567BYT8', {data: data});
+    expect(response.status()).toBe(200); // should be 401
+    expect(response.headers()['content-type']).toContain('application/json');
+    expect(await response.json()).toEqual({
+        "success" : true
+    });
+})
+
+test('@api DELETE /carts/9999 returns 404 for non existent cart ', async({ request }) => {
+    const response = await request.delete(URL + '/carts/9999');
+    expect(response.status()).toBe(404);
+    expect(response.headers()['content-type']).toContain('application/json');
+    expect(await response.json()).toEqual({
+        "message" : "Cart doesnt exists"
+    });
+})
+
+test('@api POST /carts creates a new cart and returns its id', async({ request }) => {
+    const response = await request.post(URL + '/carts');
+    expect(response.status()).toBe(201);
+    expect(response.headers()['content-type']).toContain('application/json');
+    expect(await response.json()).toHaveProperty("id");
+})
+
+test('@api GET /users/me with a valid token returns the logged-in user', async ({ request }) => {
+    const login = await request.post(URL + '/users/login', {
+        data: { email: 'customer@practicesoftwaretesting.com', password: 'welcome01' }
+    });
+    const { access_token } = await login.json();
+
+    const response = await request.get(URL + '/users/me', {
+        headers: { Authorization: `Bearer ${access_token}` }
+    });
+    expect(response.status()).toBe(200);
+    expect(response.headers()['content-type']).toContain('application/json');
+    expect(await response.json()).toMatchObject({
+        email: 'customer@practicesoftwaretesting.com'
+    });
+});
+
+test('@api GET /products/search?q=pliers returns only matching products', async ({ request }) => {
+    const response = await request.get(URL + '/products/search?q=pliers');
+    expect(response.status()).toBe(200);
+    expect(response.headers()['content-type']).toContain('application/json');
+
+    const body = await response.json();
+    expect(body.data.length).toBeGreaterThan(0);
+    for (const product of body.data) {
+        expect(product.name.toLowerCase()).toContain('pliers');
+    }
+});
+
+// test.afterAll()
