@@ -116,18 +116,6 @@ test('@api POST /users/login with valid credentials returns access token (bearer
 
 })
 
-test('@api PATCH /products/01M7HNNZWYXRNJZG1BB567BYT8 updates only product name and returns a success message', async({ request }) => {
-    const data = {
-        "name" : "Actual Thor Hammer"
-    }
-    const response = await request.patch(URL + '/products/01M7HNNZWYXRNJZG1BB567BYT8', {data: data});
-    expect(response.status()).toBe(200); // should be 401
-    expect(response.headers()['content-type']).toContain('application/json');
-    expect(await response.json()).toEqual({
-        "success" : true
-    });
-})
-
 test('@api DELETE /carts/9999 returns 404 for non existent cart ', async({ request }) => {
     const response = await request.delete(URL + '/carts/9999');
     expect(response.status()).toBe(404);
@@ -172,4 +160,21 @@ test('@api GET /products/search?q=pliers returns only matching products', async 
     }
 });
 
-// test.afterAll()
+test.fail('@api PATCH /products/01M7HNNZWYXRNJZG1BB567BYT8 does not update and returns error message (FALSE)', async({ request }) => {
+    const data = {
+        "name" : "Actual Thor Hammer"
+    }
+    const response = await request.patch(URL + '/products/01M7HNNZWYXRNJZG1BB567BYT8', {data: data});
+    expect(response.status()).toBe(401);
+    expect(response.headers()['content-type']).toContain('application/json');
+})
+
+test.fail('@api POST /brands does not update and returns error message (FALSE)', async({ request }) => {
+    const data = {
+        "name": "Bosch",
+        "slug" : "Bosch"
+    }
+    const response = await request.post(URL + '/brands', {data: data});
+    expect(response.status()).toBe(401);
+    expect(response.headers()['content-type']).toContain('application/json');
+})
