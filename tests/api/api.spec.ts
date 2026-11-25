@@ -169,12 +169,48 @@ test.fail('@api PATCH /products/01M7HNNZWYXRNJZG1BB567BYT8 does not update and r
     expect(response.headers()['content-type']).toContain('application/json');
 })
 
-test.fail('@api POST /brands does not update and returns error message (FALSE)', async({ request }) => {
+test.fail('@api POST /brands does not create and returns error message (FALSE)', async({ request }) => {
     const data = {
         "name": "Bosch",
         "slug" : "Bosch"
     }
     const response = await request.post(URL + '/brands', {data: data});
+    expect(response.status()).toBe(401);
+    expect(response.headers()['content-type']).toContain('application/json');
+})
+
+test.fail('@api POST /products does not create and returns error message (FALSE)', async({ request }) => {
+    const data = {
+        "name": "Bosch drill",
+        "price" : 9.99,
+        "category_id" : "01M7HNNZV1C5GY2TH6VAERW6GG",
+        "brand_id" : "01m8749mt93920esrd2t3v9erj",
+        "is_location_offer" : true,
+        "is_rental" : false,
+        "product_image_id" : "01M7HNNZVVZ2KC78PERHMX3BVT"
+    }
+    const response = await request.post(URL + '/products', {data: data});
+    expect(response.status()).toBe(401);
+    expect(response.headers()['content-type']).toContain('application/json');
+})
+
+test.fail('@api POST /users/register does not create and returns error message (FALSE)', async({ request }) => {
+    const data = {
+        "first_name": "User", 
+        "last_name": "User", 
+        "email": "not-an-email",
+        "password": "Str0ng!Pass2026"
+    }
+    const response = await request.post(URL + '/users/register', {data: data});
+    expect(response.status()).toBe(422);
+    expect(response.headers()['content-type']).toContain('application/json');
+})
+
+test.fail('@api PUT /products/01M7HNNZXBMR5221PWAPYZQ9JB does not update and returns error message', async({ request }) => {
+    const data = {
+        "name" : "Overwritten"
+    }
+    const response = await request.put(URL + '/products/01M7HNNZXBMR5221PWAPYZQ9JB', {data: data});
     expect(response.status()).toBe(401);
     expect(response.headers()['content-type']).toContain('application/json');
 })
