@@ -1,4 +1,5 @@
 /node_modules
+api/node_modules
 /test-results/
 /coverage/
 /tests/coverage-report
@@ -24,7 +25,10 @@ nohup.out
 .playwright-mcp
 allure*
 blob-report
-# playwright-report
+playwright-report
+*/playwright-report
+*/test-results
+*/.env
 test-results
 /demo/
 /packages/*/LICENSE

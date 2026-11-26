@@ -1,15 +1,13 @@
 import {test, expect} from '@playwright/test';
 
-const URL = 'http://localhost:8091';
-
 test('@api GET /products returns all pages containing products', async({ request }) => {
-    const response = await request.get(URL + '/products');
+    const response = await request.get('/products');
     expect(response.status()).toBe(200);
     expect(response.headers()['content-type']).toContain('application/json');
 })
 
 test('@api GET /products/01M7HNNZWM8N5HMX2J0FZ01T03 returns the product for a given id', async({ request }) => {
-    const response = await request.get(URL + '/products/01M7HNNZWM8N5HMX2J0FZ01T03');
+    const response = await request.get('/products/01M7HNNZWM8N5HMX2J0FZ01T03');
     expect(response.status()).toBe(200);
     expect(response.headers()['content-type']).toContain('application/json');
     expect(await response.json()).toEqual({
@@ -82,7 +80,7 @@ test('@api GET /products/01M7HNNZWM8N5HMX2J0FZ01T03 returns the product for a gi
 })
 
 test('@api GET /invoices returns unauthorized for guest user', async({ request }) => {
-    const response = await request.get(URL + '/invoices');
+    const response = await request.get('/invoices');
     expect(response.status()).toBe(401);
     expect(response.headers()['content-type']).toContain('application/json');
     expect(await response.json()).toEqual({
@@ -95,7 +93,7 @@ test('@api POST /users/login with invalid credentials returns unauthorized', asy
         email: "wrongemail@gmail.com",
         password: "wrongpassword123"
     }
-    const response = await request.post(URL + '/users/login', {data: data});
+    const response = await request.post('/users/login', {data: data});
     expect(response.status()).toBe(401);
     expect(response.headers()['content-type']).toContain('application/json');
     expect(await response.json()).toEqual({
@@ -109,7 +107,7 @@ test('@api POST /users/login with valid credentials returns access token (bearer
         "email" : "customer@practicesoftwaretesting.com",
         "password" : "welcome01"
     }
-    const response = await request.post(URL + '/users/login', {data: data})
+    const response = await request.post('/users/login', {data: data})
     expect(response.status()).toBe(200);
     expect(response.headers()['content-type']).toContain('application/json');
     expect(await response.json()).toHaveProperty("access_token");
@@ -117,7 +115,7 @@ test('@api POST /users/login with valid credentials returns access token (bearer
 })
 
 test('@api DELETE /carts/9999 returns 404 for non existent cart ', async({ request }) => {
-    const response = await request.delete(URL + '/carts/9999');
+    const response = await request.delete('/carts/9999');
     expect(response.status()).toBe(404);
     expect(response.headers()['content-type']).toContain('application/json');
     expect(await response.json()).toEqual({
@@ -126,19 +124,19 @@ test('@api DELETE /carts/9999 returns 404 for non existent cart ', async({ reque
 })
 
 test('@api POST /carts creates a new cart and returns its id', async({ request }) => {
-    const response = await request.post(URL + '/carts');
+    const response = await request.post('/carts');
     expect(response.status()).toBe(201);
     expect(response.headers()['content-type']).toContain('application/json');
     expect(await response.json()).toHaveProperty("id");
 })
 
 test('@api GET /users/me with a valid token returns the logged-in user', async ({ request }) => {
-    const login = await request.post(URL + '/users/login', {
+    const login = await request.post('/users/login', {
         data: { email: 'customer@practicesoftwaretesting.com', password: 'welcome01' }
     });
     const { access_token } = await login.json();
 
-    const response = await request.get(URL + '/users/me', {
+    const response = await request.get('/users/me', {
         headers: { Authorization: `Bearer ${access_token}` }
     });
     expect(response.status()).toBe(200);
@@ -149,7 +147,7 @@ test('@api GET /users/me with a valid token returns the logged-in user', async (
 });
 
 test('@api GET /products/search?q=pliers returns only matching products', async ({ request }) => {
-    const response = await request.get(URL + '/products/search?q=pliers');
+    const response = await request.get('/products/search?q=pliers');
     expect(response.status()).toBe(200);
     expect(response.headers()['content-type']).toContain('application/json');
 
@@ -164,7 +162,7 @@ test.fail('@api PATCH /products/01M7HNNZWYXRNJZG1BB567BYT8 does not update and r
     const data = {
         "name" : "Actual Thor Hammer"
     }
-    const response = await request.patch(URL + '/products/01M7HNNZWYXRNJZG1BB567BYT8', {data: data});
+    const response = await request.patch('/products/01M7HNNZWYXRNJZG1BB567BYT8', {data: data});
     expect(response.status()).toBe(401);
     expect(response.headers()['content-type']).toContain('application/json');
 })
@@ -174,7 +172,7 @@ test.fail('@api POST /brands does not create and returns error message (FALSE)',
         "name": "Bosch",
         "slug" : "Bosch"
     }
-    const response = await request.post(URL + '/brands', {data: data});
+    const response = await request.post('/brands', {data: data});
     expect(response.status()).toBe(401);
     expect(response.headers()['content-type']).toContain('application/json');
 })
@@ -189,7 +187,7 @@ test.fail('@api POST /products does not create and returns error message (FALSE)
         "is_rental" : false,
         "product_image_id" : "01M7HNNZVVZ2KC78PERHMX3BVT"
     }
-    const response = await request.post(URL + '/products', {data: data});
+    const response = await request.post('/products', {data: data});
     expect(response.status()).toBe(401);
     expect(response.headers()['content-type']).toContain('application/json');
 })
@@ -201,7 +199,7 @@ test.fail('@api POST /users/register does not create and returns error message (
         "email": "not-an-email",
         "password": "Str0ng!Pass2026"
     }
-    const response = await request.post(URL + '/users/register', {data: data});
+    const response = await request.post('/users/register', {data: data});
     expect(response.status()).toBe(422);
     expect(response.headers()['content-type']).toContain('application/json');
 })
@@ -210,7 +208,7 @@ test.fail('@api PUT /products/01M7HNNZXBMR5221PWAPYZQ9JB does not update and ret
     const data = {
         "name" : "Overwritten"
     }
-    const response = await request.put(URL + '/products/01M7HNNZXBMR5221PWAPYZQ9JB', {data: data});
+    const response = await request.put('/products/01M7HNNZXBMR5221PWAPYZQ9JB', {data: data});
     expect(response.status()).toBe(401);
     expect(response.headers()['content-type']).toContain('application/json');
 })
