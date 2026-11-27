@@ -47,7 +47,7 @@ test('@smoke update cart quantity', async({page})=>{
     const productPage = new ProductPage(page);
     const checkoutPage = new CheckoutPage(page);
 
-    await productPage.open('01M7HNNZWVJ3PCNQRAWW6A80J3');
+    await productPage.open('Hammer');
     await productPage.add_to_cart();
     
     await checkoutPage.open();

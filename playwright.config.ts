@@ -1,7 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
-  testDir: './tests',
+  testDir: './e2e/tests',
   reporter: [['list'], ['html', { open: 'never' }]],
   fullyParallel: true,
   use: {

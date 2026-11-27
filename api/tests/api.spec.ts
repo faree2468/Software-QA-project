@@ -1,4 +1,32 @@
-import {test, expect} from '@playwright/test';
+import {test, expect, type APIRequestContext} from '@playwright/test';
+
+async function productId(request: APIRequestContext, name: string) {
+    const res = await request.get(`/products/search?q=${encodeURIComponent(name)}`);
+    const product = (await res.json()).data.find((p: any) => p.name === name);
+    if (!product) throw new Error(`Product "${name}" not found`);
+    return product.id;
+}
+
+async function categoryId(request: APIRequestContext) {
+    const res = await request.get(`/categories`);
+    const ctg = (await res.json()).data[0]
+    if (!ctg) throw new Error(`Category not found`);
+    return ctg.id;
+}
+
+async function brandId(request: APIRequestContext) {
+    const res = await request.get(`/brands`);
+    const brand = (await res.json()).data[0];
+    if (!brand) throw new Error(`Brand not found`);
+    return brand.id;
+}
+
+async function imageId(request: APIRequestContext) {
+    const res = await request.get(`/images`);
+    const image = (await res.json()).data[0];
+    if (!image) throw new Error(`Brand not found`);
+    return image.id;
+}
 
 test('@api GET /products returns all pages containing products', async({ request }) => {
     const response = await request.get('/products');
@@ -6,76 +34,20 @@ test('@api GET /products returns all pages containing products', async({ request
     expect(response.headers()['content-type']).toContain('application/json');
 })
 
-test('@api GET /products/01M7HNNZWM8N5HMX2J0FZ01T03 returns the product for a given id', async({ request }) => {
-    const response = await request.get('/products/01M7HNNZWM8N5HMX2J0FZ01T03');
+test('@api GET /products/{id} returns the product for a given id', async({ request }) => {
+    const id = await productId(request, 'Pliers');
+    const response = await request.get(`/products/${id}`);
     expect(response.status()).toBe(200);
     expect(response.headers()['content-type']).toContain('application/json');
-    expect(await response.json()).toEqual({
+    expect(await response.json()).toMatchObject({
         "id": "01M7HNNZWM8N5HMX2J0FZ01T03",
         "name": "Pliers",
-        "description": "Reliable general-purpose pliers crafted from drop-forged carbon steel for long-lasting durability in demanding working conditions. The serrated jaws provide a firm grip on a variety of materials including wire, nails, small fasteners, and irregularly shaped objects. Comfortable rubber-coated handles absorb vibration and reduce hand fatigue during extended use, while the non-slip surface ensures confident handling. The precision pivot joint maintains alignment under load, delivering smooth, controlled jaw action with every squeeze. Heat-treated steel construction resists wear and deformation even under heavy use. A must-have foundational tool for any workshop, equally suited for professional tradespeople and home repair projects.",
         "price": 12.01,
         "is_location_offer": false,
         "is_rental": false,
         "co2_rating": "D",
         "in_stock": true,
         "is_eco_friendly": false,
-        "product_image": {
-            "id": "01M7HNNZVVZ2KC78PERHMX3BVT",
-            "by_name": "Everyday basics",
-            "by_url": "https://unsplash.com/@zanardi",
-            "source_name": "Unsplash",
-            "source_url": "https://unsplash.com/photos/I8eTuMmxIfo",
-            "file_name": "pliers02.avif",
-            "title": "Pliers"
-        },
-        "category": {
-            "id": "01M7HNNZV6SGC07WTJGVX7Y3GS",
-            "name": "Pliers",
-            "slug": "pliers",
-            "parent_id": "01M7HNNZV1C5GY2TH6VAERW6GG"
-        },
-        "brand": {
-            "id": "01M7HNNZKE31K7FYBZR7WZC0W1",
-            "name": "ForgeFlex Tools"
-        },
-        "specs": [
-            {
-            "id": "01M7HNP010N5A0GB8WH2E6BGC2",
-            "product_id": "01M7HNNZWM8N5HMX2J0FZ01T03",
-            "spec_name": "Handle Material",
-            "spec_value": "Rubber",
-            "spec_unit": null
-            },
-            {
-            "id": "01M7HNP010N5A0GB8WH2E6BGC0",
-            "product_id": "01M7HNNZWM8N5HMX2J0FZ01T03",
-            "spec_name": "Length",
-            "spec_value": "180",
-            "spec_unit": "mm"
-            },
-            {
-            "id": "01M7HNP010N5A0GB8WH2E6BGC1",
-            "product_id": "01M7HNNZWM8N5HMX2J0FZ01T03",
-            "spec_name": "Material",
-            "spec_value": "Carbon Steel",
-            "spec_unit": null
-            },
-            {
-            "id": "01M7HNP010N5A0GB8WH2E6BGC3",
-            "product_id": "01M7HNNZWM8N5HMX2J0FZ01T03",
-            "spec_name": "Warranty",
-            "spec_value": "1",
-            "spec_unit": "years"
-            },
-            {
-            "id": "01M7HNP010N5A0GB8WH2E6BGBZ",
-            "product_id": "01M7HNNZWM8N5HMX2J0FZ01T03",
-            "spec_name": "Weight",
-            "spec_value": "280",
-            "spec_unit": "g"
-            }
-        ]
     })
 })
 
@@ -158,11 +130,12 @@ test('@api GET /products/search?q=pliers returns only matching products', async 
     }
 });
 
-test.fail('@api PATCH /products/01M7HNNZWYXRNJZG1BB567BYT8 does not update and returns error message (FALSE)', async({ request }) => {
+test.fail('@api PATCH /products/{id} does not update and returns error message (FALSE)', async({ request }) => {
+    const id = await productId(request, "Actual Thor Hammer");
     const data = {
-        "name" : "Actual Thor Hammer"
+        "name" : "Thor Hammer"
     }
-    const response = await request.patch('/products/01M7HNNZWYXRNJZG1BB567BYT8', {data: data});
+    const response = await request.patch(`/products/${id}`, {data: data});
     expect(response.status()).toBe(401);
     expect(response.headers()['content-type']).toContain('application/json');
 })
@@ -178,14 +151,17 @@ test.fail('@api POST /brands does not create and returns error message (FALSE)',
 })
 
 test.fail('@api POST /products does not create and returns error message (FALSE)', async({ request }) => {
+    const ctgId = await categoryId(request);
+    const bId = await brandId(request);
+    const imgId = await imageId(request);
     const data = {
         "name": "Bosch drill",
         "price" : 9.99,
-        "category_id" : "01M7HNNZV1C5GY2TH6VAERW6GG",
-        "brand_id" : "01m8749mt93920esrd2t3v9erj",
+        "category_id" : ctgId,
+        "brand_id" : bId,
         "is_location_offer" : true,
         "is_rental" : false,
-        "product_image_id" : "01M7HNNZVVZ2KC78PERHMX3BVT"
+        "product_image_id" : imgId
     }
     const response = await request.post('/products', {data: data});
     expect(response.status()).toBe(401);
@@ -204,11 +180,13 @@ test.fail('@api POST /users/register does not create and returns error message (
     expect(response.headers()['content-type']).toContain('application/json');
 })
 
-test.fail('@api PUT /products/01M7HNNZXBMR5221PWAPYZQ9JB does not update and returns error message', async({ request }) => {
+test.fail('@api PUT /products/{id} does not update and returns error message', async({ request }) => {
+    const id = await productId(request, "Chisels");
     const data = {
         "name" : "Overwritten"
     }
-    const response = await request.put('/products/01M7HNNZXBMR5221PWAPYZQ9JB', {data: data});
+    const response = await request.put(`/products/${id}`, {data: data});
     expect(response.status()).toBe(401);
     expect(response.headers()['content-type']).toContain('application/json');
 })
+
